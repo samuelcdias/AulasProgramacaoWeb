@@ -27,7 +27,7 @@ controller.listar = async (req, res) => {
          const lista = await Produto.find().populate('fornecedor')
          res.send(lista) // HTTP 200 implícito
       }
-      catch {
+      catch(erro) {
          console.log(erro)
          res.status(500).send(erro)
       }
@@ -111,4 +111,4 @@ async function busca(req, res) {
    }
 }
 
-module.exports = controlle
+module.exports = controller

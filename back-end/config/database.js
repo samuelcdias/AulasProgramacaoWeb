@@ -5,7 +5,7 @@ module.exports = function(uri){
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useFindAndModify: false,
-        createIndexes: true
+        useCreateIndex: true
     })
 
     mongoose.connection.on("connected", () =>

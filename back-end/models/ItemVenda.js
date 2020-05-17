@@ -22,12 +22,12 @@ const esquema = mongoose.Schema({
         default: 0
     },
     venda: {
-        type: mongoose.ObjectiId,
+        type: mongoose.ObjectId,
         ref: 'Venda',
         required: true,
     },
     produto: {
-        type: mongoose.ObjectiId,
+        type: mongoose.ObjectId,
         ref: 'Produto',
         required: true,
     }
@@ -41,5 +41,5 @@ const esquema = mongoose.Schema({
         criados a partir do modelo serão armazenados no 
         MongoDB
 */
-module.exports = mongoose.model('Fornecedor', esquema,
-    'fornecedores')
+module.exports = mongoose.model('ItemVenda', esquema,
+    'itensvenda')

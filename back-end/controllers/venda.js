@@ -34,7 +34,7 @@ controller.listar = async (req, res) => {
 
          res.send(lista) // HTTP 200 implícito
       }
-      catch {
+      catch(erro) {
          console.log(erro)
          res.status(500).send(erro)
       }
