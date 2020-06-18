@@ -5,8 +5,8 @@ const controller = {} // Objeto vazio
 controller.novo = async (req, res) => {
     try {
         await Fornecedor.create(req.body)
-    // HTTP Status 201: Created
-    res.sendStatus(201)
+        // HTTP Status 201: Created
+        res.status(201).end()
     }
     catch(erro) {
         console.log(req.body)
