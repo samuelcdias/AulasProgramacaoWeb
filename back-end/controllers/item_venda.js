@@ -27,8 +27,8 @@ controller.listar = async (req, res) => {
             { path:'venda', populate: 'cliente'
             })
             .populate(
-               { path:'produto', select: 'descricao data_validade fornecedor',
-                populate: 'fornecedor'
+               { path:'produto', /*select: 'descricao data_validade fornecedor',
+                populate: 'fornecedor'*/
             })
          res.send(lista) // HTTP 200 implícito
       }

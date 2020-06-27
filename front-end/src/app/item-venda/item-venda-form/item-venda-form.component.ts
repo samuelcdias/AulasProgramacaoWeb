@@ -1,16 +1,16 @@
 import { ClienteService } from './../../cliente/cliente.service';
 import { Component, OnInit } from '@angular/core';
-import { VendaService } from '../venda.service';
+import { ItemVendaService } from '../item-venda.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
 
 @Component({
-  selector: 'app-venda-form',
-  templateUrl: './venda-form.component.html',
-  styleUrls: ['./venda-form.component.scss']
+  selector: 'app-item-venda-form',
+  templateUrl: './item-venda-form.component.html',
+  styleUrls: ['./item-venda-form.component.scss']
 })
-export class VendaFormComponent implements OnInit {
+export class ItemVendaFormComponent implements OnInit {
 
   title: string = 'Nova venda'
 
@@ -39,7 +39,7 @@ export class VendaFormComponent implements OnInit {
   ]
   
   constructor(
-    private vendaSrv: VendaService,
+    private itemVendaSrv: ItemVendaService,
     private clienteSrv: ClienteService,
     private snackBar: MatSnackBar,
     private router: Router,
@@ -56,7 +56,7 @@ export class VendaFormComponent implements OnInit {
       // o back-end para recuperar o resgisto e colocar
       // para edição
       try {
-        this.venda = await this.vendaSrv.obterUm(params['id'])
+        this.venda = await this.itemVendaSrv.obterUm(params['id'])
         this.title = 'Atualizando venda'
       }
       catch(erro) {
@@ -84,12 +84,12 @@ export class VendaFormComponent implements OnInit {
         let msg = 'Venda atualizada com sucesso.'
         // Se existir o campo _id, é o caso de atualização
         if(this.venda._id) {
-          await this.vendaSrv.atualizar(this.venda)
+          await this.itemVendaSrv.atualizar(this.venda)
         }
         // Senão, é caso de criar um nova
         else {
           console.log('ok 1')
-          await this.vendaSrv.novo(this.venda)
+          await this.itemVendaSrv.novo(this.venda)
           console.log('ok 2')
           msg = 'Venda criada com sucesso.'
         }
