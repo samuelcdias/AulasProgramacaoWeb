@@ -3,38 +3,37 @@
 <form class="std-form" #f="ngForm" (ngSubmit)="salvar(f)">
 
     <mat-form-field>
-        <mat-label>Nº venda</mat-label>
-        <input matInput [(ngModel)]="venda.num_venda" name="num_venda" readonly>
-    </mat-form-field>
-
-    <mat-form-field>
-        <mat-select placeholder="Selecione o cliente" required [(ngModel)]="venda.cliente" name="cliente">
-            <mat-option *ngFor="let cliente of clientes" [value]="cliente._id">
-                {{ cliente.nome }}
+        <mat-select placeholder="Selecione a venda" required [(ngModel)]="itemVenda.venda" name="venda">
+            <mat-option *ngFor="let venda of vendas" [value]="venda._id">
+                Venda nº {{ venda.num_venda }} - Cliente: {{venda.cliente?.nome}} - 
+                    Data da venda: {{venda.data_venda | date: 'dd/MM/yyyy'}}
             </mat-option>
         </mat-select>
     </mat-form-field>
 
     <mat-form-field>
-        <mat-label>Escolha uma data</mat-label>
-        <input name="data_venda" matInput [(ngModel)]="venda.data_venda" [matDatepicker]="data_venda" required>
-        <mat-datepicker-toggle matSuffix [for]="data_venda"></mat-datepicker-toggle>
-        <mat-datepicker #data_venda></mat-datepicker>
-    </mat-form-field>
-
-    <mat-form-field>
-        <mat-select placeholder="Selecione a forma de pagamento" required [(ngModel)]="venda.forma_pagamento" name="forma_pagamento">
-            <mat-option *ngFor="let fp of formasPagamento" [value]="fp.codigo">
-                {{ fp.nome }}
+        <mat-select placeholder="Selecione a produto" required [(ngModel)]="itemVenda.produto" name="produto">
+            <mat-option *ngFor="let produto of produtos" [value]="produto._id">
+                {{produto.descricao}} ({{produto.preco_venda | currency:'BRL':'symbol':'1.2-2':'pt-BR'}})
             </mat-option>
         </mat-select>
     </mat-form-field>
 
     <mat-form-field>
-        <mat-label>Escolha uma data</mat-label>
-        <input name="data_pagamento" matInput [(ngModel)]="venda.data_pagamento" [matDatepicker]="data_pagamento">
-        <mat-datepicker-toggle matSuffix [for]="data_pagamento"></mat-datepicker-toggle>
-        <mat-datepicker #data_pagamento></mat-datepicker>
+        <mat-label>Quantidade</mat-label>
+        <input type="number" name="quantidade" matInput [(ngModel)]="itemVenda.quantidade"  required step="1">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Desconto</mat-label>
+        <mat-icon matPrefix>attach_money</mat-icon>
+        <input type="number" name="desconto" matInput [(ngModel)]="itemVenda.desconto"  required>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Acréscimo</mat-label>
+        <mat-icon matPrefix>attach_money</mat-icon>
+        <input type="number" name="acrescimo" matInput [(ngModel)]="itemVenda.acrescimo"  required>
     </mat-form-field>
       
     <mat-toolbar class="form-buttons">

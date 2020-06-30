@@ -116,4 +116,18 @@ async function busca(req, res) {
    }
 }
 
+controller.filtrarVenda = async function(req, res) {
+   let id = req.params.id
+   try {
+      const lista = await ItemVenda.find({venda: id})
+         .populate('produto')
+         .populate('venda')
+      res.send(lista)
+   }
+   catch(erro) {
+      console.log(erro)
+      res.status(500).send(erro)
+   }
+}
+
 module.exports = controller

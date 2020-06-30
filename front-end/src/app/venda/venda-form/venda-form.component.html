@@ -48,3 +48,11 @@
         </mat-toolbar-row>
      </mat-toolbar>
 </form>
+
+<!-- Só exibe a listagem de itens de venda quando já houver a venda (ela já tem id)-->
+<ng-container *ngIf="venda._id">
+    <hr>
+
+    <!-- listagem de itens da venda, recebendo com oparÂmetro qual a venda cujos itens serão exibidos-->
+    <app-item-venda-list [venda]="venda._id"></app-item-venda-list>
+</ng-container>

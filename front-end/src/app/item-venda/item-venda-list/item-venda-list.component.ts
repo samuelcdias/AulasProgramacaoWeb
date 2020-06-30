@@ -3,6 +3,7 @@ import { ItemVendaService } from '../item-venda.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDlgComponent } from 'src/app/ui/confirm-dlg/confirm-dlg.component';
+import { Input } from '@angular/core';
 
 @Component({
   selector: 'app-item-venda-list',
@@ -10,7 +11,10 @@ import { ConfirmDlgComponent } from 'src/app/ui/confirm-dlg/confirm-dlg.componen
   styleUrls: ['./item-venda-list.component.scss']
 })
 export class ItemVendaListComponent implements OnInit {
-  
+
+  //Recebendo um parâmetro do componente pai
+  @Input() venda : string = ''
+
   itensVenda : any = [] // Vetor vazio
 
   displayedColumns : string[] = ['venda', 'produto', 'quantidade',
@@ -23,7 +27,12 @@ export class ItemVendaListComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    this.itensVenda = await this.ItemVendaSrv.listar()
+    // Se for passado o parÂmetro venda pelo componente pai
+    if (this.venda != '') {
+      this.itensVenda = await this.ItemVendaSrv.filtrarVenda(this.venda)
+    } else {
+      this.itensVenda = await this.ItemVendaSrv.listar() 
+    }
     console.log(this.itensVenda)
   }
 

@@ -1,10 +1,11 @@
-import { ClienteService } from './../../cliente/cliente.service';
 import { Component, OnInit } from '@angular/core';
-import { ItemVendaService } from '../item-venda.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
-
+import { ProdutoService } from 'src/app/produto/produto.service';
+import { VendaService } from 'src/app/venda/venda.service';
+import { ItemVendaService } from '../item-venda.service';
+import { Location } from '@angular/common'
 @Component({
   selector: 'app-item-venda-form',
   templateUrl: './item-venda-form.component.html',
@@ -12,38 +13,25 @@ import { NgForm } from '@angular/forms';
 })
 export class ItemVendaFormComponent implements OnInit {
 
-  title: string = 'Nova venda'
+  title: string = 'Novo item de venda'
 
-  venda: any = {} // Objeto vazio
+  itemVenda: any = {
+    desconto: 0,
+    acrescimo: 0
+  } 
 
   // Entidades relacionadas
-  clientes : any = [] // Vetor vazio
-
-  formasPagamento: any = [
-    {
-      codigo:'DI',
-      nome: 'DI - dinheiro'
-    },
-    {
-      codigo:'CH',
-      nome: 'CH - cheque'
-    },
-    {
-      codigo:'CC',
-      nome: 'CC - cartão de crédito'
-    },
-    {
-      codigo:'CD',
-      nome: 'CD - cartão de débito'
-    }
-  ]
+  vendas : any = [] // Vetor vazio
+  produtos : any = [] // Vetor vazio
   
   constructor(
     private itemVendaSrv: ItemVendaService,
-    private clienteSrv: ClienteService,
+    private vendaSrv: VendaService,
+    private produtoSrv: ProdutoService,
     private snackBar: MatSnackBar,
     private router: Router,
-    private actRoute: ActivatedRoute
+    private actRoute: ActivatedRoute,
+    private Location: Location
   ) { }
 
   async ngOnInit() {
@@ -56,8 +44,8 @@ export class ItemVendaFormComponent implements OnInit {
       // o back-end para recuperar o resgisto e colocar
       // para edição
       try {
-        this.venda = await this.itemVendaSrv.obterUm(params['id'])
-        this.title = 'Atualizando venda'
+        this.itemVenda = await this.itemVendaSrv.obterUm(params['id'])
+        this.title = 'Atualizando item de venda'
       }
       catch(erro) {
         this.snackBar.open(erro.message, 'Que pena!', {duration: 5000})
@@ -66,7 +54,8 @@ export class ItemVendaFormComponent implements OnInit {
 
     // Entidades relacionadas
     try {
-      this.clientes = await this.clienteSrv.listar()
+      this.vendas = await this.vendaSrv.listar()
+      this.produtos = await this.produtoSrv.listar()
     }
     catch(erro) {
       this.snackBar.open(erro.message, 'Que pena!', {duration: 5000})
@@ -81,22 +70,22 @@ export class ItemVendaFormComponent implements OnInit {
     // Só tenta salvar se o form for válido
     if(form.valid) {
       try{
-        let msg = 'Venda atualizada com sucesso.'
+        let msg = 'Item de venda atualizado com sucesso.'
         // Se existir o campo _id, é o caso de atualização
-        if(this.venda._id) {
-          await this.itemVendaSrv.atualizar(this.venda)
+        if(this.itemVenda._id) {
+          await this.itemVendaSrv.atualizar(this.itemVenda)
         }
         // Senão, é caso de criar um nova
         else {
           console.log('ok 1')
-          await this.itemVendaSrv.novo(this.venda)
+          await this.itemVendaSrv.novo(this.itemVenda)
           console.log('ok 2')
-          msg = 'Venda criada com sucesso.'
+          msg = 'Item de venda criado com sucesso.'
         }
         // Dá o feedback para o usuário
         this.snackBar.open(msg, 'Entendi', {duration: 5000})
         // Voltar À listagem
-        this.router.navigate(['/venda'])
+        this.Location.back()
       }
       catch(erro) {
         this.snackBar.open(erro.message, 'Que pena!', {duration: 5000})
