@@ -42,6 +42,10 @@ const routes: Routes = [
     component: ItemVendaFormComponent
   },
   {
+    path: 'item-venda/novo/:venda',
+    component: ItemVendaFormComponent
+  },
+  {
     path:'item-venda/:id',
     component: ItemVendaFormComponent
   }

@@ -16,7 +16,7 @@
     </mat-form-field>
 
     <mat-form-field>
-        <mat-label>Escolha uma data</mat-label>
+        <mat-label>Escolha uma data de venda</mat-label>
         <input name="data_venda" matInput [(ngModel)]="venda.data_venda" [matDatepicker]="data_venda" required>
         <mat-datepicker-toggle matSuffix [for]="data_venda"></mat-datepicker-toggle>
         <mat-datepicker #data_venda></mat-datepicker>
@@ -31,7 +31,7 @@
     </mat-form-field>
 
     <mat-form-field>
-        <mat-label>Escolha uma data</mat-label>
+        <mat-label>Escolha uma data de pagamento</mat-label>
         <input name="data_pagamento" matInput [(ngModel)]="venda.data_pagamento" [matDatepicker]="data_pagamento">
         <mat-datepicker-toggle matSuffix [for]="data_pagamento"></mat-datepicker-toggle>
         <mat-datepicker #data_pagamento></mat-datepicker>

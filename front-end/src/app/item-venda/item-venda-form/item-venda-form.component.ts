@@ -6,6 +6,8 @@ import { ProdutoService } from 'src/app/produto/produto.service';
 import { VendaService } from 'src/app/venda/venda.service';
 import { ItemVendaService } from '../item-venda.service';
 import { Location } from '@angular/common'
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDlgComponent } from 'src/app/ui/confirm-dlg/confirm-dlg.component';
 @Component({
   selector: 'app-item-venda-form',
   templateUrl: './item-venda-form.component.html',
@@ -14,6 +16,8 @@ import { Location } from '@angular/common'
 export class ItemVendaFormComponent implements OnInit {
 
   title: string = 'Novo item de venda'
+
+  vendaDisabled : boolean = false
 
   itemVenda: any = {
     desconto: 0,
@@ -31,7 +35,8 @@ export class ItemVendaFormComponent implements OnInit {
     private snackBar: MatSnackBar,
     private router: Router,
     private actRoute: ActivatedRoute,
-    private Location: Location
+    private location: Location,
+    private dialog: MatDialog
   ) { }
 
   async ngOnInit() {
@@ -46,10 +51,21 @@ export class ItemVendaFormComponent implements OnInit {
       try {
         this.itemVenda = await this.itemVendaSrv.obterUm(params['id'])
         this.title = 'Atualizando item de venda'
+
+        this.vendaDisabled = true
       }
       catch(erro) {
         this.snackBar.open(erro.message, 'Que pena!', {duration: 5000})
       }
+    }
+
+    // Existe um parâmetro chamado :venda?
+    if(params['venda']) {
+      // Forçar o id da venda no item de venda
+      this.itemVenda.venda = params['venda']
+
+      // Desabilita o select da venda
+      this.vendaDisabled = true
     }
 
     // Entidades relacionadas
@@ -62,8 +78,24 @@ export class ItemVendaFormComponent implements OnInit {
     }
   }
 
-  voltar(x) {
+  async voltar(form: NgForm) {
 
+    let result = true;
+    console.log(form);
+    // form.dirty = formulário "sujo", não salvo(via código)
+    // form.touched = o conteúdo de algum campo foi alterado (via usuário)
+    if(form.dirty && form.touched) {
+      let dialogRef = this.dialog.open(ConfirmDlgComponent, {
+        width: '50%',
+        data: { question: 'Há dados não salvos. Deseja realmente voltar?' }
+      });
+
+      result = await dialogRef.afterClosed().toPromise();
+    }
+
+    if (result) {
+      this.location.back()
+    }
   }
 
   async salvar(form: NgForm) {
@@ -85,7 +117,7 @@ export class ItemVendaFormComponent implements OnInit {
         // Dá o feedback para o usuário
         this.snackBar.open(msg, 'Entendi', {duration: 5000})
         // Voltar À listagem
-        this.Location.back()
+        this.location.back()
       }
       catch(erro) {
         this.snackBar.open(erro.message, 'Que pena!', {duration: 5000})
